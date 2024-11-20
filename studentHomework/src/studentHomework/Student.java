@@ -9,16 +9,18 @@ public class Student {
 	private int mat;
 	private int tot;
 	private double avr;
+	private int price;
 	
-	public Student(int no, String name, int kor, int eng, int mat, int tot, double avr) {
+	public Student(int no, String name, int kor, int eng, int mat, int tot, double avr, int price) {
 		super();
 		this.no = no;
 		this.name = name;
 		this.kor = kor;
 		this.eng = eng;
 		this.mat = mat;
-		this.tot = kor+eng+mat;
-		this.avr = (kor+eng+mat)/3.0;
+		this.tot = tot;
+		this.avr = avr;
+		this.price = price;
 	}
 
 	public Student() {
@@ -27,8 +29,9 @@ public class Student {
 		this.kor = kor;
 		this.eng = eng;
 		this.mat = mat;
-		this.tot = kor+eng+mat;
-		this.avr = (kor+eng+mat)/3.0;
+		this.tot = tot;
+		this.avr = avr;
+		this.price = price;
 	}
 
 	public int getNo() {
@@ -86,11 +89,18 @@ public class Student {
 	public void setAvr(double avr) {
 		this.avr = avr;
 	}
+	
+	public int getPrice() {
+		return price;
+	}
 
+	public void setPrice(int price) {
+		this.price = price;
+	}
 	@Override
 	public String toString() {
 		return "Student [no=" + no + ", name=" + name + ", kor=" + kor + ", eng=" + eng + ", mat=" + mat + ", tot="
-				+ tot + ", avr=" + avr + "]";
+				+ tot + ", avr=" + avr + ", price=" + price+ "]";
 	}
 	
 	
