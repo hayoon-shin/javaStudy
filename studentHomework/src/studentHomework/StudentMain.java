@@ -77,15 +77,12 @@ public class StudentMain {
 		System.out.println("수학 성적 입력");
 		String mat = scan.nextLine();
 		System.out.println("합계 입력");
-		String tot = scan.nextLine();
-		System.out.println("평균 입력");
-		String avr = scan.nextLine();
 		Student student = new Student();
 		stmt = con.createStatement();
 		int result = stmt.executeUpdate("UPDATE STUDENT SET  NAME = '"+
 				name +"', KOR = '"+ kor +"', ENG = '"+
-				eng+"' , MAT = '"+ mat + "', TOT = '"+ tot +"', AVR = '"+
-						avr+ "' WHERE NO = '"+ no +"'");
+				eng+"' , MAT = '"+ mat + "', TOT = '"+ student.getTot() +"', AVR = '"+
+						student.getAvr()+ "' WHERE NO = '"+ no +"'");
 		// 4.내용이 잘 입력이 되었는지 check
 		System.out.println((result != 0) ? "수정성공" : "수정실패");
 		// 6.sql 객체 반남
@@ -109,15 +106,10 @@ public class StudentMain {
 		String eng = scan.nextLine();
 		System.out.println("수학 성적 입력");
 		String mat = scan.nextLine();
-		System.out.println("합계 입력");
-		String tot = scan.nextLine();
-		System.out.println("평균 입력");
-		String avr = scan.nextLine();
-
 		Student student = new Student();
 		stmt = con.createStatement();
 		int result = stmt.executeUpdate("INSERT INTO STUDENT VALUES " + "(STUDENT_ID_SEQ.nextval,'" + name + "','" + kor
-				+ "','" + eng + "','" + mat + "','" + tot + "','" + avr + "')");
+				+ "','" + eng + "','" + mat + "','" + student.getTot() + "','" + student.getAvr() + "')");
 		// 4.내용이 잘 입력이 되었는지 check
 		System.out.println((result != 0) ? "입력성공" : "입력실패");
 		// 6.sql 객체 반남

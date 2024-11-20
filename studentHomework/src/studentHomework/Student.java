@@ -17,8 +17,8 @@ public class Student {
 		this.kor = kor;
 		this.eng = eng;
 		this.mat = mat;
-		this.tot = tot;
-		this.avr = avr;
+		this.tot = kor+eng+mat;
+		this.avr = (kor+eng+mat)/3.0;
 	}
 
 	public Student() {
@@ -27,8 +27,8 @@ public class Student {
 		this.kor = kor;
 		this.eng = eng;
 		this.mat = mat;
-		this.tot = tot;
-		this.avr = avr;
+		this.tot = kor+eng+mat;
+		this.avr = (kor+eng+mat)/3.0;
 	}
 
 	public int getNo() {
