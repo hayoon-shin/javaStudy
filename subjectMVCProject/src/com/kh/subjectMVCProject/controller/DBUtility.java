@@ -1,4 +1,4 @@
-package com.kh.java.controller;
+package com.kh.subjectMVCProject.controller;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,9 +16,9 @@ public class DBUtility {
 	public static Connection dbCon(){
 
 		Connection con = null;
-		// db.properties에서 id, pw 가져오기
+		// 1. db.properties 파일에서 id, pw, url setting 가져오기
 		System.out.println("Hello");
-		String filePath = "C:\\Users\\ssh33\\Documents\\javaStudy\\studentMVCProject\\db.properties";
+		String filePath = "C:\\Users\\ssh33\\Documents\\javaStudy\\subjectMVCProject\\src\\db.properties";
 		Properties pt = new Properties();
 		try {
 			pt.load(new FileReader(filePath));
@@ -29,7 +29,7 @@ public class DBUtility {
 		String pw = pt.getProperty("pw");
 		String url = pt.getProperty("url");
 		
-		// 1. jdbc driver load  2. connection
+		// 2. jdbc driver load  3. connection
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521/xe", id, pw);

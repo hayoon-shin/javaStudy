@@ -1,17 +1,18 @@
-package com.kh.java.controller;
+package com.kh.subjectMVCProject.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.kh.java.model.StudentVO;
+import com.kh.subjectMVCProject.model.StudentVO;
 
-public class StudentRegisterManager {
+
+public class TraineeRegisterManager {
 	public static Scanner sc = new Scanner(System.in);
 	//전체 학생리스트를 출력요청
 	public static void totalSelectManager() throws SQLException {
 		ArrayList<StudentVO> studentList = new ArrayList<StudentVO>();
-		studentList = StudentDAO.totalSelect();
+		studentList = StudentDAO.studentSelect();
 		if(studentList == null) {
 			System.out.println("데이터가 존재하지 않습니다.");
 			return;
@@ -33,7 +34,7 @@ public class StudentRegisterManager {
 		System.out.print("수학 점수를 입력하세요: ");
 		int mat = Integer.parseInt(sc.nextLine());
 
-		StudentVO studentVO = new StudentVO(name, kor, eng, mat);
+		StudentVO studentVO = new StudentVO();
 		boolean successFlag = StudentDAO.studentInsert(studentVO);
 		
 		if(successFlag == true) {
@@ -56,7 +57,7 @@ public class StudentRegisterManager {
 		System.out.print("새로운 수학 점수를 입력하세요: ");
 		int mat = Integer.parseInt(sc.nextLine());
 		
-		StudentVO svo = new StudentVO(no, name, kor, eng, mat);
+		StudentVO svo = new StudentVO();
 		boolean successFlag = StudentDAO.studentUpdate(svo);
 		if(successFlag == true) {
 			System.out.println("입력처리 성공");

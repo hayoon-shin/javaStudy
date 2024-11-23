@@ -100,10 +100,10 @@ public class StudentHomeworkRegisterManager {
 		}
 	}
 	private static void studentListPrint(ArrayList<StudentHomeworkVO> studentList) {
-		System.out.println("====================================================");
+		System.out.println("===========================================================================================================");
 		for (StudentHomeworkVO student : studentList) {
 			System.out.println(student.toString());
 		}
-		System.out.println("====================================================");
+		System.out.println("===========================================================================================================");
 	}
 }
