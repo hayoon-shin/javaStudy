@@ -1,6 +1,11 @@
+package com.kh.studentScoreManagement;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.kh.studentScoreManagement.controller.StudentRegisterManager;
+import com.kh.studentScoreManagement.controller.SubjectRegisterManager;
+import com.kh.studentScoreManagement.controller.TraineeRegisterManager;
 import com.kh.studentScoreManagement.view.MENU_CHOICE;
 import com.kh.studentScoreManagement.view.MenuViewer;
 import com.kh.studentScoreManagement.view.STUDENT_CHOICE;

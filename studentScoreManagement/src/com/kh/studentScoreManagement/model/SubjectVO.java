@@ -23,6 +23,12 @@ public class SubjectVO {
 		this.rnk = rnk;
 	}
 
+	public SubjectVO(int subNo, String subName, int score) {
+		this.subNo = subNo;
+		this.subName = subName;
+		this.score = score;
+	}
+
 	public int getSubNo() {
 		return subNo;
 	}
