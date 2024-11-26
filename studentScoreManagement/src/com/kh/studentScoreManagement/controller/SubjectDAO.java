@@ -15,10 +15,10 @@ import com.kh.studentScoreManagement.model.SubjectVO;
 public class SubjectDAO {
 		
 	public static final String SUBJECT_SELECT = "SELECT * FROM SUBJECT";
-    public static final String SUBJECT_INSERT = "insert into subject(no, num, name) values (subject_seq.nextval, ?, ?)";
+    public static final String SUBJECT_INSERT = "INSERT INTO SUBJECT VALUES (?, ?, ?)";
     public static final String SUBJECT_CALL_RANK_PROC = "{call STUDENT_RANK_PROC()}";
-    public static final String SUBJECT_UPDATE = "UPDATE STUDENT SET NAME = ?, KOR = ?, ENG = ?, MAT = ? WHERE NO = ?";
-    public static final String SUBJECT_DELETE = "DELETE FROM STUDENT WHERE NO = ?";
+    public static final String SUBJECT_UPDATE = "UPDATE SUBJECT SET NAME = ?, SCORE = ? WHERE NO = ?";
+    public static final String SUBJECT_DELETE = "DELETE FROM SUBJECT WHERE NO = ?";
     public static final String SUBJECT_SORT = "SELECT *FROM STUDENT ORDER BY RANK";
 	
 	public ArrayList<SubjectVO> subjectSelect() throws SQLException {
@@ -33,10 +33,10 @@ public class SubjectDAO {
 
 		if(rs.next()) {
 			do{
-				int subNo = rs.getInt("SUB_NO");
-				String subName = rs.getString("SUB_NAME");
+				int no = rs.getInt("NO");
+				String name = rs.getString("NAME");
 				int score = rs.getInt("SCORE");
-				SubjectVO svo = new SubjectVO(subNo, subName, score); 
+				SubjectVO svo = new SubjectVO(no, name, score); 
 				subjectList.add(svo);
 			}while (rs.next());
 		}else {
@@ -46,45 +46,49 @@ public class SubjectDAO {
 		return subjectList;
 	}
 	
-	public boolean subjectInsert(SubjectVO svo) throws SQLException  {
+	public boolean subjectInsert(SubjectVO svo){
 		//Conection
 		boolean successFlag = false; 
 		Connection con = null;
-		CallableStatement cstmt = null;
 		PreparedStatement pstmt = null;
 
 		// 1 Load, 2. connect
 		con = DBUtility.dbCon();
 
-		pstmt = con.prepareStatement(SUBJECT_INSERT);
-		pstmt.setInt(1, svo.getSubNo());
-		pstmt.setString(2, svo.getSubName());
-		
-		int result = pstmt.executeUpdate();
-		
-		DBUtility.dbClose(con, pstmt, cstmt);
-		successFlag = (result != 0 ) ? true : false;
+		try {
+			pstmt = con.prepareStatement(SUBJECT_INSERT);
+			pstmt.setInt(1, svo.getNo());
+			pstmt.setString(2, svo.getName());
+			pstmt.setInt(3, svo.getScore());
+			int result = pstmt.executeUpdate();
+			successFlag = (result != 0 ) ? true : false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtility.dbClose(con, pstmt);
+		}
+
 		return successFlag; 
 	}
 
 	public static boolean subjectUpdate(SubjectVO svo) throws SQLException {
 		boolean successFlag = false; 
 		Connection con = null;
-		CallableStatement cstmt = null;
 		PreparedStatement pstmt = null;
 
 		con = DBUtility.dbCon();
 		pstmt = con.prepareStatement(SUBJECT_UPDATE);
-		pstmt.setString(1, svo.getSubName());
+		pstmt.setString(1, svo.getName());
+		pstmt.setInt(2, svo.getScore());
+		pstmt.setInt(3, svo.getNo());
+		int result = pstmt.executeUpdate();
+//		cstmt = con.prepareCall(SUBJECT_CALL_RANK_PROC);
+//		int result2 = cstmt.executeUpdate();
 		
+		successFlag = (result != 0) ? true : false;
 
-		int result1 = pstmt.executeUpdate();
-		cstmt = con.prepareCall(SUBJECT_CALL_RANK_PROC);
-		int result2 = cstmt.executeUpdate();
-		
-		successFlag = (result1 != 0 && result2 != 0) ? true : false;
-
-		DBUtility.dbClose(con, pstmt, cstmt);
+		DBUtility.dbClose(con, pstmt);
 		return successFlag; 
 	}
 
@@ -95,7 +99,7 @@ public class SubjectDAO {
 
 		con = DBUtility.dbCon();
 		pstmt = con.prepareStatement(SUBJECT_DELETE);
-		pstmt.setInt(1, svo.getSubNo());
+		pstmt.setInt(1, svo.getNo());
 		int result = pstmt.executeUpdate();
 		successFlag = (result != 0) ? true : false ;
 

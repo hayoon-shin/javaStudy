@@ -15,9 +15,9 @@ import com.kh.studentScoreManagement.model.StudentVO;
 public class StudentDAO {
 		
 	public static final String STUDENT_SELECT = "SELECT * FROM STUDENT";
-    public static final String STUDENT_INSERT = "INSERT INTO STUDENT(STU_NO, STU_NAME, EMAIL, ADDRESS, PHONE, REG_DATE) VALUES(STUDENT_NO_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
+    public static final String STUDENT_INSERT = "INSERT INTO STUDENT VALUES(STUDENT_SEQ.NEXTVAL, ?, ?, ?, ?, SYSDATE)";
 //    public static final String STUDENT_CALL_RANK_PROC = "{call STUDENT_RANK_PROC()}";
-    public static final String STUDENT_UPDATE = "UPDATE STUDENT SET STU_NAME = ?, EMAIL = ?, ADDRESS = ?, PHONE = ?, REG_DATE = ? WHERE STU_NO = ?";
+    public static final String STUDENT_UPDATE = "UPDATE STUDENT SET NAME = ?, EMAIL = ?, ADDRESS = ?, PHONE = ?, REGDATE = ? WHERE NO = ?";
     public static final String STUDENT_DELETE = "DELETE FROM STUDENT WHERE NO = ?";
 //    public static final String STUDENT_SORT = "SELECT *FROM STUDENT ORDER BY RANK";
 //    public static final String STUDENT_ID_CHECK = "select COUNT(*) AS COUNT from student where id = ?";
@@ -34,14 +34,14 @@ public class StudentDAO {
 
 		if(rs.next()) {
 			do{
-				int stuNo = rs.getInt("STU_NO");
-				String stuName = rs.getString("STU_NAME");
+				int no = rs.getInt("NO");
+				String name = rs.getString("NAME");
 				String email = rs.getString("EMAIL");
 				String address = rs.getString("ADDRESS");
 				String phone = rs.getString("PHONE");
-				Date reg_date = rs.getDate("REG_DATE");
+				Date regdate = rs.getDate("REGDATE");
 
-				StudentVO stu = new StudentVO();
+				StudentVO stu = new StudentVO(no,name,email,address,phone,regdate);
 				studentList.add(stu);
 			}while (rs.next());
 		}else {
@@ -51,51 +51,59 @@ public class StudentDAO {
 		return studentList;
 	}
 	
-	public static boolean studentInsert(StudentVO svo) throws SQLException {
+	public static boolean studentInsert(StudentVO svo) {
 		// Conection
 		boolean successFlag = false; 
 		Connection con = null;
-		CallableStatement cstmt = null;
 		PreparedStatement pstmt = null;
 
 		// 1 Load, 2. connect
 		con = DBUtility.dbCon();
 
-		pstmt = con.prepareStatement(STUDENT_INSERT);
-		pstmt.setString(1, svo.getStuName());
 		
+		try {
+			pstmt = con.prepareStatement(STUDENT_INSERT);
+			pstmt.setString(1, svo.getName());
+			pstmt.setString(2, svo.getEmail());
+			pstmt.setString(3, svo.getAddress());
+			pstmt.setString(4, svo.getPhone());
+			int result1 = pstmt.executeUpdate();
+			successFlag = (result1 != 0) ? true : false;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtility.dbClose(con, pstmt);
+		}
 
-		int result1 = pstmt.executeUpdate();
-		System.out.println((result1 != 0) ? "입력성공" : "입력실패");
-
-//		cstmt = con.prepareCall(STUDENT_CALL_RANK_PROC);
-//		int result2 = cstmt.executeUpdate();
-//		System.out.println((result2 != 0) ? "프로시저성공" : "프로시저실패");
-
-		DBUtility.dbClose(con, pstmt, cstmt);
-		successFlag = (result1 != 0) ? true : false;
-		
 		return successFlag; 
 	}
 
-	public static boolean studentUpdate(StudentVO svo) throws SQLException {
+	public static boolean studentUpdate(StudentVO svo)  {
 		boolean successFlag = false; 
 		Connection con = null;
-		CallableStatement cstmt = null;
 		PreparedStatement pstmt = null;
 
 		con = DBUtility.dbCon();
-		pstmt = con.prepareStatement(STUDENT_UPDATE);
-		pstmt.setString(1, svo.getStuName());
+		try {
+			pstmt = con.prepareStatement(STUDENT_UPDATE);
+			pstmt.setString(1, svo.getName());
+			pstmt.setString(2, svo.getEmail());
+			pstmt.setString(3, svo.getAddress());
+			pstmt.setString(4, svo.getPhone());
+			pstmt.setDate(5, svo.getRegdate());
+			pstmt.setInt(6, svo.getNo());
+			int result1 = pstmt.executeUpdate();
+			
+			successFlag = (result1 != 0) ? true : false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtility.dbClose(con, pstmt);
+		}
 		
-
-		int result1 = pstmt.executeUpdate();
-//		cstmt = con.prepareCall(STUDENT_CALL_RANK_PROC);
-//		int result2 = cstmt.executeUpdate();
-		
-		successFlag = (result1 != 0) ? true : false;
-
-		DBUtility.dbClose(con, pstmt, cstmt);
 		return successFlag; 
 	}
 
@@ -106,7 +114,8 @@ public class StudentDAO {
 
 		con = DBUtility.dbCon();
 		pstmt = con.prepareStatement(STUDENT_DELETE);
-		pstmt.setInt(1, svo.getStuNo());
+		pstmt.setInt(1, svo.getNo());
+	
 		int result = pstmt.executeUpdate();
 		successFlag = (result != 0) ? true : false ;
 

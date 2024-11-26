@@ -3,41 +3,50 @@ package com.kh.studentScoreManagement.model;
 import java.sql.Date;
 
 public class StudentVO {
-	private int stuNo;                  //-- 학번(PK)
-    private String stuName;	        	//-- 이름
+	private int no;                  //-- 학번(PK)
+    private String name;	        	//-- 이름
     private String email; 		        //-- 이메일
     private String address;		        //-- 주소
     private String phone; 		        //-- 전화번호
-    private Date reg_date;              //-- 등록일
+    private Date regdate;              //-- 등록일
 	
     public StudentVO() {
     	
     }
 
-	public StudentVO(int stuNo, String stuName, String email, String address, String phone, Date reg_date) {
+	public StudentVO(int no, String name, String email, String address, String phone, Date regdate) {
 		super();
-		this.stuNo = stuNo;
-		this.stuName = stuName;
+		this.no = no;
+		this.name = name;
 		this.email = email;
 		this.address = address;
 		this.phone = phone;
-		this.reg_date = reg_date;
+		this.regdate = regdate;
 	}
 
-	public int getStuNo() {
-		return stuNo;
+	public StudentVO(int no, String name, String email, String address, String phone) {
+		super();
+		this.no = no;
+		this.name = name;
+		this.email = email;
+		this.address = address;
+		this.phone = phone;
 	}
 
-	public void setStuNo(int stuNo) {
-		this.stuNo = stuNo;
+	public int getNo() {
+		return no;
 	}
 
-	public String getStuName() {
-		return stuName;
+	public void setNo(int no) {
+		this.no = no;
 	}
 
-	public void setStuName(String stuName) {
-		this.stuName = stuName;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {
@@ -64,19 +73,20 @@ public class StudentVO {
 		this.phone = phone;
 	}
 
-	public Date getReg_date() {
-		return reg_date;
+	public Date getRegdate() {
+		return regdate;
 	}
 
-	public void setReg_date(Date reg_date) {
-		this.reg_date = reg_date;
+	public void setRegdate(Date regdate) {
+		this.regdate = regdate;
 	}
 
 	@Override
 	public String toString() {
-		return "[stuNo=" + stuNo + ", stuName=" + stuName + ", email=" + email + ", address=" + address
-				+ ", phone=" + phone + ", reg_date=" + reg_date + "]";
+		return "StudentVO [no=" + no + ", name=" + name + ", email=" + email + ", address=" + address + ", phone="
+				+ phone + ", regdate=" + regdate + "]";
 	}
-    
+
+	
     
 }

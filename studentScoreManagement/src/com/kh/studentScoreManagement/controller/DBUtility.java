@@ -14,7 +14,6 @@ public class DBUtility {
 
 		Connection con = null;
 		// 1. db.properties 파일에서 id, pw, url setting 가져오기
-		System.out.println("Hello");
 		String filePath = "C:\\Users\\ssh33\\Documents\\javaStudy\\studentScoreManagement\\src\\db.properties";
 		Properties pt = new Properties();
 		try {

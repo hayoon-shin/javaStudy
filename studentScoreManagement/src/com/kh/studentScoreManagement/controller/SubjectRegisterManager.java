@@ -26,8 +26,8 @@ public class SubjectRegisterManager {
 		SubjectDAO sd = new SubjectDAO();
 		
 
-		int subNo; // 과목 코드
-		String subName; // 과목이름
+		int no; // 과목 코드
+		String name; // 과목이름
 		int score; // 학점
 
 		System.out.println("과목 전체 리스트");
@@ -36,12 +36,12 @@ public class SubjectRegisterManager {
 
 		System.out.println("과목 정보 입력(학과번호:01,02,03,04,05)학과명01(C언어),02(Database 개론), 03(정보보호 개론), 04(시스템 프로그래밍),05(네트워크 프로그래밍)");
 		System.out.print("과목번호>>");
-		subNo = Integer.parseInt(sc.nextLine());
+		no = Integer.parseInt(sc.nextLine());
 		System.out.print("과목명>>");
-		subName = sc.nextLine();
-		System.out.print("학점>>");
+		name = sc.nextLine();
+		System.out.print("학점수>>");
 		score = Integer.parseInt(sc.nextLine());
-		SubjectVO svo = new SubjectVO(subNo,subName,score);
+		SubjectVO svo = new SubjectVO(no,name,score);
 		boolean successFlag = sd.subjectInsert(svo);
 
 		if(successFlag == false) {
@@ -59,18 +59,14 @@ public class SubjectRegisterManager {
 	}
 
 	public static void updateManager() throws SQLException {
-		System.out.print("수정할 학생의 번호를 입력하세요: ");
-		int stuNo = Integer.parseInt(sc.nextLine());
-		System.out.print("새로운 이름을 입력하세요: ");
-		String stuName = sc.nextLine();
-		System.out.print("새로운 과목 코드를 입력하세요: ");
-		int subNo = Integer.parseInt(sc.nextLine());
-		System.out.print("새로운 과목 이름을 입력하세요: ");
-		String subName = sc.nextLine();
-		System.out.print("새로운 과목 점수를 입력하세요: ");
+		System.out.println("과목 정보 입력(학과번호:01,02,03,04,05)학과명01(C언어),02(Database 개론), 03(정보보호 개론), 04(시스템 프로그래밍),05(네트워크 프로그래밍)");
+		System.out.print("수정할 과목의 번호를 입력하세요: ");
+		int no = Integer.parseInt(sc.nextLine());
+		System.out.print("수정할 과목 이름을 입력하세요: ");
+		String name = sc.nextLine();
+		System.out.print("수정할 과목 학점수를 입력하세요: ");
 		int score = Integer.parseInt(sc.nextLine());
-		
-		SubjectVO svo = new SubjectVO();
+		SubjectVO svo = new SubjectVO(no,name,score);
 		boolean successFlag = SubjectDAO.subjectUpdate(svo);
 		
 		if(successFlag == true) {
@@ -81,11 +77,11 @@ public class SubjectRegisterManager {
 	}
 
 	public static void deleteManager() throws SQLException {
-		System.out.print("삭제할 학생 번호를 입력하세요: ");
-		int stuNo = Integer.parseInt(sc.nextLine());
-		StudentVO svo = new StudentVO();
-		svo.setStuNo(stuNo);
-		boolean successFlag = StudentDAO.studentDelete(svo); 
+		System.out.print("삭제할 과목 번호를 입력하세요: ");
+		int no = Integer.parseInt(sc.nextLine());
+		SubjectVO svo = new SubjectVO();
+		svo.setNo(no);
+		boolean successFlag = SubjectDAO.subjectDelete(svo); 
 		
 		if(successFlag == true) {
 			System.out.println("삭제처리 성공");

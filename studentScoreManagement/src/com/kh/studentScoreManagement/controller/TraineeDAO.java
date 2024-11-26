@@ -1,6 +1,5 @@
 package com.kh.studentScoreManagement.controller;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,16 +7,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.kh.studentScoreManagement.model.StudentVO;
+import com.kh.studentScoreManagement.model.TraineeAllVO;
 import com.kh.studentScoreManagement.model.TraineeVO;
 
 public class TraineeDAO {
-	public static final String TRAINEE_SELECT = "SELECT * FROM STUDENT";
-    public static final String TRAINEE_INSERT = "INSERT INTO STUDENT(NO, NAME, KOR, ENG, MAT) VALUES(STUDENT_NO_SEQ.NEXTVAL, ?, ?, ?, ?)";
-    public static final String TRAINEE_CALL_RANK_PROC = "{call STUDENT_RANK_PROC()}";
-    public static final String TRAINEE_UPDATE = "UPDATE STUDENT SET NAME = ?, KOR = ?, ENG = ?, MAT = ? WHERE NO = ?";
-    public static final String TRAINEE_DELETE = "DELETE FROM STUDENT WHERE NO = ?";
-    public static final String TRAINEE_SORT = "SELECT *FROM STUDENT ORDER BY RANK";
- 	public static ArrayList<TraineeVO> studentSelect() throws SQLException {Connection con = null;
+	public static final String TRAINEE_SELECT = "SELECT * FROM TRAINEE";
+    public static final String TRAINEE_INSERT = "INSERT INTO TRAINEE VALUES(TRAINEE_SEQ.NEXTVAL, ?, ?)";
+    public static final String TRAINEE_UPDATE = "UPDATE TRAINEE SET STUNO = ?, SUBNO = ? WHERE NO = ?";
+    public static final String TRAINEE_DELETE = "DELETE FROM TRAINEE WHERE STUNO = ?";
+    public static final String TRAINEE_SUBJECT_JOIN_SELECT = "select T.NO, STUNO, SUBNO, NAME, SCORE from trainee T inner join subject S on S.no = T.SUBNO";
+    
+    public static ArrayList<TraineeVO> studentSelect() throws SQLException {Connection con = null;
 	Statement stmt = null;
 	ResultSet rs = null;
 	ArrayList<TraineeVO> studentList = new ArrayList<TraineeVO>();
@@ -28,15 +29,10 @@ public class TraineeDAO {
 
 	while (rs.next()) {
 		int no = rs.getInt("NO");
-		String name = rs.getString("NAME");
-		int kor = rs.getInt("KOR");
-		int eng = rs.getInt("ENG");
-		int mat = rs.getInt("MAT");
-		int total = rs.getInt("TOTAL");
-		int ave = rs.getInt("AVE");
-		int rank = rs.getInt("RANK");
+		int stuno = rs.getInt("STUNO");
+		int subno = rs.getInt("SUBNO");
 
-		TraineeVO stu = new TraineeVO();
+		TraineeVO stu = new TraineeVO(no,stuno,subno);
 		studentList.add(stu);
 	}
 //	stuListPrint(studentList);
@@ -45,53 +41,49 @@ public class TraineeDAO {
 	return studentList;
 	}
 	
-	public static boolean studentInsert(TraineeVO svo) throws SQLException {
+	public static boolean studentInsert(TraineeVO svo) {
 		// Conection
 		boolean successFlag = false;
 		Connection con = null;
-		CallableStatement cstmt = null;
 		PreparedStatement pstmt = null;
 
 		// 1 Load, 2. connect
 		con = DBUtility.dbCon();
 
-		pstmt = con.prepareStatement(TRAINEE_INSERT);
-//		pstmt.setString(1, svo.getName());
-		
-		int result1 = pstmt.executeUpdate();
-		System.out.println((result1 != 0) ? "입력성공" : "입력실패");
-
-		cstmt = con.prepareCall(TRAINEE_CALL_RANK_PROC);
-		int result2 = cstmt.executeUpdate();
-		System.out.println((result2 != 0) ? "프로시저성공" : "프로시저실패");
-
-
-		DBUtility.dbClose(con, pstmt, cstmt);
-		successFlag = (result1 != 0 && result2 != 0) ? true : false;
+		try {
+			pstmt = con.prepareStatement(TRAINEE_INSERT);
+			pstmt.setInt(1, svo.getStuno());
+			pstmt.setInt(2, svo.getSubno());
+			int result1 = pstmt.executeUpdate();
+			successFlag = (result1 != 0) ? true : false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtility.dbClose(con, pstmt);
+		}
 		
 		return successFlag;
 	}
 
-	public static boolean studentUpdate(TraineeVO svo) throws SQLException {
-		boolean successFlag = false;
-		Connection con = null;
-		CallableStatement cstmt = null;
-		PreparedStatement pstmt = null;
-
-		con = DBUtility.dbCon();
-
-		pstmt = con.prepareStatement(TRAINEE_UPDATE);
-//		pstmt.setString(1, svo.getName());
-
-
-		int result1 = pstmt.executeUpdate();
-		cstmt = con.prepareCall(TRAINEE_CALL_RANK_PROC);
-		int result2 = cstmt.executeUpdate();
-		successFlag = (result1 != 0 && result2 != 0) ? true : false;
-		
-		DBUtility.dbClose(con, pstmt, cstmt);
-		return successFlag;
-	}
+//	public static boolean studentUpdate(TraineeVO svo) throws SQLException {
+//		boolean successFlag = false;
+//		Connection con = null;
+//		PreparedStatement pstmt = null;
+//
+//		con = DBUtility.dbCon();
+//
+//		pstmt = con.prepareStatement(TRAINEE_UPDATE);
+//		pstmt.setInt(1, svo.getStuno());
+//		pstmt.setInt(2, svo.getSubno());
+//		pstmt.setInt(3, svo.getNo());
+//		int result1 = pstmt.executeUpdate();
+//
+//		successFlag = (result1 != 0) ? true : false;
+//		
+//		DBUtility.dbClose(con, pstmt);
+//		return successFlag;
+//	}
 	public static boolean studentDelete(TraineeVO svo) throws SQLException {
 		boolean successFlag = false;
 		Connection con = null;
@@ -99,7 +91,7 @@ public class TraineeDAO {
 
 		con = DBUtility.dbCon();
 		pstmt = con.prepareStatement(TRAINEE_DELETE);
-		pstmt.setInt(1, svo.getTraNo());
+		pstmt.setInt(1, svo.getStuno());
 		int result = pstmt.executeUpdate();
 
 		successFlag = (result != 0) ? true : false;
@@ -108,34 +100,34 @@ public class TraineeDAO {
 		
 		return successFlag;
 	}
-	public static ArrayList<TraineeVO> studentSort() throws SQLException {
+	
+	// 조인 메뉴 조회
+	public ArrayList<TraineeAllVO> studentAllSelect() throws SQLException {
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		ArrayList<TraineeVO> studentList = new ArrayList<TraineeVO>();
+		ArrayList<TraineeAllVO> traineeList = new ArrayList<TraineeAllVO>();
 
 		con = DBUtility.dbCon();
 		stmt = con.createStatement();
-		rs = stmt.executeQuery(TRAINEE_SORT);
+		rs = stmt.executeQuery(TRAINEE_SUBJECT_JOIN_SELECT);
 
-		while (rs.next()) {
-			int no = rs.getInt("NO");
-			String name = rs.getString("NAME");
-			int kor = rs.getInt("KOR");
-			int eng = rs.getInt("ENG");
-			int mat = rs.getInt("MAT");
-			int total = rs.getInt("TOTAL");
-			int ave = rs.getInt("AVE");
-			int rank = rs.getInt("RANK");
-
-			TraineeVO stu = new TraineeVO();
-			studentList.add(stu);
+		if(rs.next()) {
+			do{
+				int no = rs.getInt("NO");
+				int stuno = rs.getInt("STUNO");
+				int subno = rs.getInt("SUBNO");
+				String name = rs.getString("NAME");
+				int score = rs.getInt("SCORE");
+				
+				TraineeAllVO trainee = new TraineeAllVO(no,stuno,subno,name,score);
+				traineeList.add(trainee);
+			}while (rs.next());
+		}else {
+			traineeList = null; 
 		}
-
 		DBUtility.dbClose(con, stmt, rs);
-		
-		return studentList;
-
+		return traineeList;
 	}
 
 }
