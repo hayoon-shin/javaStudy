@@ -1,49 +1,56 @@
 package com.kh.studentScoreManagement.model;
 
 public class TraineeVO {
-	 private int traNo;                  //-- 수강번호(PK)
-	 private int stuNo;                  //-- 학번(FK)
-	 private int subNo;                  //-- 과목코드(FK)
+	 private int no;                  //-- 수강번호(PK)
+	 private int stuno;                  //-- 학번(FK)
+	 private int subno;                  //-- 과목코드(FK)
 	
 	 public TraineeVO() {
 		
 	}
 
-	public TraineeVO(int traNo, int stuNo, int subNo) {
+	public TraineeVO(int no, int stuno, int subno) {
 		super();
-		this.traNo = traNo;
-		this.stuNo = stuNo;
-		this.subNo = subNo;
+		this.no = no;
+		this.stuno = stuno;
+		this.subno = subno;
 	}
 
-	public int getTraNo() {
-		return traNo;
+	public TraineeVO(int stuno, int subno) {
+		this.stuno = stuno;
+		this.subno = subno;
 	}
 
-	public void setTraNo(int traNo) {
-		this.traNo = traNo;
+	public int getNo() {
+		return no;
 	}
 
-	public int getStuNo() {
-		return stuNo;
+	public void setNo(int no) {
+		this.no = no;
 	}
 
-	public void setStuNo(int stuNo) {
-		this.stuNo = stuNo;
+	public int getStuno() {
+		return stuno;
 	}
 
-	public int getSubNo() {
-		return subNo;
+	public void setStuno(int stuno) {
+		this.stuno = stuno;
 	}
 
-	public void setSubNo(int subNo) {
-		this.subNo = subNo;
+	public int getSubno() {
+		return subno;
+	}
+
+	public void setSubno(int subno) {
+		this.subno = subno;
 	}
 
 	@Override
 	public String toString() {
-		return "[traNo=" + traNo + ", stuNo=" + stuNo + ", subNo=" + subNo + "]";
+		return "TraineeVO [no=" + no + ", stuno=" + stuno + ", subno=" + subno + "]";
 	}
+
+
 	 
 	 
 	 
