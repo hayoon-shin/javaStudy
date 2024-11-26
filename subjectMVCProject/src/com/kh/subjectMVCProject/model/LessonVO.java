@@ -5,8 +5,15 @@ public class LessonVO {
 	private String abbre;	// 과목요약
 	private String name;	// 과목이름
 	
+	// 생성자(디생,매생) : 생성자오버로딩
 	public LessonVO() {
 		
+	}
+	
+	public LessonVO(String abbre, String name) {
+		super();
+		this.abbre = abbre;
+		this.name = name;
 	}
 
 	public LessonVO(int no, String abbre, String name) {
@@ -39,7 +46,8 @@ public class LessonVO {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	//toString (string.format)
 	@Override
 	public String toString() {
 		return "[no=" + no + ", abbre=" + abbre + ", name=" + name + "]";

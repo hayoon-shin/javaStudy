@@ -83,35 +83,39 @@ public class SubjectMain {
 	}
 	//과목정보
 	private static void lessonMenu() {
-		int no;
-		LessonRegisterManager lrm = new LessonRegisterManager();   
+        int no;
+        LessonRegisterManager lrm = new LessonRegisterManager();
 
-		MenuViewer.lessonMenuView();
-		no = Integer.parseInt(sc.nextLine());
-		switch (no) {
-		case LESSON_CHOICE.INSERT:
-			System.out.println("");
-		//	srm.insertManager();
-			break;
-		case LESSON_CHOICE.UPDATE:
-			System.out.println("");
-//			studnetManager.studnetUpdate();
-			break;
-		case LESSON_CHOICE.LIST:
-			System.out.println("");
-//			studnetManager.studnetTotalList();
-			break;
-		case LESSON_CHOICE.DELETE:
-			System.out.println("");
-//			studnetManager.studnetTotalList();
-			break;
-		case LESSON_CHOICE.MAIN:
-			return;
-		default:
-			System.out.println("해당 메뉴 번호만 입력하세요.");
-		}
-		
-	}
+        MenuViewer.lessonMenuView();
+        no = Integer.parseInt(sc.nextLine());
+        switch (no) {
+        case LESSON_CHOICE.LIST:
+            System.out.println("");
+            lrm.selectManager();
+            break;
+        case LESSON_CHOICE.INSERT:
+            System.out.println("");
+            lrm.insertManager();
+            break;
+        case LESSON_CHOICE.UPDATE:
+            System.out.println("");
+            lrm.updateManager();
+            break;
+        case LESSON_CHOICE.DELETE:
+            System.out.println("");
+            lrm.deleteManager();
+            break;
+        case LESSON_CHOICE.SORT:
+            System.out.println("");
+            lrm.selectSortManager();
+            break;
+        case LESSON_CHOICE.MAIN:
+            return;
+        default:
+            System.out.println("해당 메뉴 번호만 입력하세요.");
+        }
+
+    }
 	//학과정보
 	private static void subjectMenu() throws SQLException {
 		int no;
@@ -164,7 +168,7 @@ public class SubjectMain {
 			break;
 		case STUDENT_CHOICE.LIST:
 			System.out.println("");
-//			studnetManager.studnetTotalList();
+			srm.selectManager();
 			break;
 		case STUDENT_CHOICE.DELETE:
 			System.out.println("");
@@ -173,7 +177,7 @@ public class SubjectMain {
 		case STUDENT_CHOICE.LIST_ALL:
 			System.out.println("");
 			srm.selectAllManager();
-			break;	
+			break;
 		case STUDENT_CHOICE.MAIN:
 			return;
 		default:

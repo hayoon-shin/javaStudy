@@ -2,12 +2,14 @@ package com.kh.subjectMVCProject.controller;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.kh.subjectMVCProject.model.StudentAllVO;
 import com.kh.subjectMVCProject.model.StudentVO;
 
 
@@ -21,35 +23,42 @@ public class StudentDAO {
     public static final String STUDENT_SORT = "SELECT *FROM STUDENT ORDER BY RANK";
     public static final String STUDENT_ID_CHECK = "select COUNT(*) AS COUNT from student where id = ?";
     public static final String STUDENT_NUM_COUNT ="select LPAD(count(*)+1,4,'0') as TOTAL_COUNT from student where s_num = ?";
+	private static final String STUDENT_SUBJECT_JOIN_SELECT = "SELECT STU.NO, STU.NUM, STU.NAME, STU.ID,PASSWD,STU.S_NUM,SUB.NAME AS SUBJECT_NAME ,BIRTHDAY,PHONE,ADDRESS, EMAIL, SDATE\r\n"
+			+ "FROM STUDENT STU INNER JOIN SUBJECT SUB ON STU.S_NUM = SUB.NUM ";
 	
-    public static ArrayList<StudentVO> studentSelect() throws SQLException {
+    public static ArrayList<StudentVO> studentSelect() {
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		ArrayList<StudentVO> studentList = new ArrayList<StudentVO>();
-
 		con = DBUtility.dbCon();
-		stmt = con.createStatement();
-		rs = stmt.executeQuery(STUDENT_SELECT);
-
-		if(rs.next()) {
-			do{
-				int no = rs.getInt("NO");
-				String name = rs.getString("NAME");
-				int kor = rs.getInt("KOR");
-				int eng = rs.getInt("ENG");
-				int mat = rs.getInt("MAT");
-				int total = rs.getInt("TOTAL");
-				int ave = rs.getInt("AVE");
-				int rank = rs.getInt("RANK");
-
-				StudentVO stu = new StudentVO();
-				studentList.add(stu);
-			}while (rs.next());
-		}else {
-			studentList = null; 
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(STUDENT_SELECT);
+			if(rs.next()) {
+				do{
+					int no = rs.getInt("NO");
+					String num = rs.getString("NUM");
+					String name = rs.getString("NAME");
+					String id = rs.getString("ID");
+					String passwd = rs.getString("PASSWD");
+					String s_num = rs.getString("S_NUM");
+					String birthday = rs.getString("BIRTHDAY");
+					String phone = rs.getString("PHONE");
+					String address = rs.getString("ADDRESS");
+					String email = rs.getString("EMAIL");
+					Date sdate = rs.getDate("SDATE");
+					StudentVO stu = new StudentVO(no, num, name, id, passwd, s_num, birthday, phone, address, email, sdate);
+					studentList.add(stu);
+				}while (rs.next());
+			}else {
+				studentList = null; 
+			}
+		} catch (SQLException e) {
+			System.out.println(e.toString());
+		} finally {
+			DBUtility.dbClose(con, stmt, rs);
 		}
-		DBUtility.dbClose(con, stmt, rs);
 		return studentList;
 	}
 	
@@ -186,6 +195,7 @@ public class StudentDAO {
 		try {
 			pstmt = con.prepareStatement(STUDENT_NUM_COUNT);
 			pstmt.setString(1, svo.getS_num());
+			rs = pstmt.executeQuery(); 
 			if(rs.next()) {
 				result = rs.getString("TOTAL_COUNT");
 			}else {
@@ -197,6 +207,45 @@ public class StudentDAO {
 			DBUtility.dbClose(con, pstmt);
 		}
 		return result;
+	}
+
+	//해당학과와 학생정보를 조인해서 정보를 가져오기
+	public ArrayList<StudentAllVO> studentAllSelect() {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		ArrayList<StudentAllVO> studentAllList = new ArrayList<StudentAllVO>();
+		con = DBUtility.dbCon();
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(STUDENT_SUBJECT_JOIN_SELECT);
+			if(rs.next()) {
+				do{
+					int no = rs.getInt("NO");
+					String num = rs.getString("NUM");
+					String name = rs.getString("NAME");
+					String id = rs.getString("ID");
+					String passwd = rs.getString("PASSWD");
+					String s_num = rs.getString("S_NUM");
+					String s_name = rs.getString("SUBJECT_NAME");
+					String birthday = rs.getString("BIRTHDAY");
+					String phone = rs.getString("PHONE");
+					String address = rs.getString("ADDRESS");
+					String email = rs.getString("EMAIL");
+					Date sdate = rs.getDate("SDATE");
+					StudentAllVO stu = 
+							new StudentAllVO(no, num, name, id, passwd, s_num, s_name, birthday, phone, address, email, sdate);
+					studentAllList.add(stu);
+				}while (rs.next());
+			}else {
+				studentAllList = null; 
+			}
+		} catch (SQLException e) {
+			System.out.println(e.toString());
+		} finally {
+			DBUtility.dbClose(con, stmt, rs);
+		}
+		return studentAllList;
 	}
 
 }

@@ -14,7 +14,6 @@ public class DBUtility {
 
 		Connection con = null;
 		// 1. db.properties 파일에서 id, pw, url setting 가져오기
-		System.out.println("Hello");
 		String filePath = "C:\\Users\\ssh33\\Documents\\javaStudy\\subjectMVCProject\\src\\db.properties";
 		Properties pt = new Properties();
 		try {
@@ -28,8 +27,8 @@ public class DBUtility {
 		
 		// 2. jdbc driver load  3. connection
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521/xe", id, pw);
+			Class.forName("oracle.jdbc.driver.OracleDriver");  // 오라클 드라이버를 메모리에 로드시켜줌
+			con = DriverManager.getConnection(url, id, pw);    // con을 가지고 우리는 CURD를 할 수 있다.
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.toString());
 		} catch (SQLException e) {
