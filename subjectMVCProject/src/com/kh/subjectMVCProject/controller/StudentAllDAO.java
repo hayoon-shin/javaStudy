@@ -173,7 +173,7 @@ public class StudentAllDAO {
 				int ave = rs.getInt("AVE");
 				int rank = rs.getInt("RANK");
 
-				StudentVO stu = new StudentVO();
+				StudentAllVO stu = new StudentAllVO();
 				studentList.add(stu);
 			}while (rs.next());
 		}else {

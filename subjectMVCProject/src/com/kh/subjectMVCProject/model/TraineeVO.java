@@ -1,38 +1,54 @@
 package com.kh.subjectMVCProject.model;
 
 import java.sql.Date;
-
+//T.no, T.section, 
 public class TraineeVO {
 	private int no;				// pk, seq	
 	private String s_num;		// student.num(fk) 학생번호
 	private String abbre;		// lesson.abbre(fk) 과목요약
 	private String section;		// 전공,부전공,교양
-	private Date registDate;			// 수강신청일
+	private Date regdate;			// 수강신청일
+	//Student join
+	private String s_name;
+	//Student join
+	private String l_name;
+	
+	
 	
 	public TraineeVO() {
 		
 	}
 
-	public TraineeVO(int no, String s_num, String abbre, String section, Date registDate) {
+	public TraineeVO(int no, String s_num, String abbre, String section, Date regdate) {
 		super();
 		this.no = no;
 		this.s_num = s_num;
 		this.abbre = abbre;
 		this.section = section;
-		this.registDate = registDate;
+		this.regdate = regdate;
 	}
-
-	public TraineeVO(String s_num, String abbre, String section) {
+	//조인을 위한 생성자
+	public TraineeVO(int no, String s_num, String abbre, String section, Date regdate, String s_name, String l_name) {
 		super();
+		this.no = no;
 		this.s_num = s_num;
 		this.abbre = abbre;
 		this.section = section;
+		this.regdate = regdate;
+		this.s_name = s_name;
+		this.l_name = l_name;
+	}	
+
+	public TraineeVO(int no, String section, Date regdate, String s_num, String s_name, String abbre,
+			String l_name) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getNo() {
 		return no;
 	}
 
+	
 	public void setNo(int no) {
 		this.no = no;
 	}
@@ -61,21 +77,37 @@ public class TraineeVO {
 		this.section = section;
 	}
 
-	public Date getRegistDate() {
-		return registDate;
+	public Date getRegdate() {
+		return regdate;
 	}
 
-	public void setRegistDate(Date registDate) {
-		this.registDate = registDate;
+	public void setRegdate(Date regdate) {
+		this.regdate = regdate;
+	}
+	
+	public String getS_name() {
+		return s_name;
+	}
+
+	public void setS_name(String s_name) {
+		this.s_name = s_name;
+	}
+
+	public String getL_name() {
+		return l_name;
+	}
+
+	public void setL_name(String l_name) {
+		this.l_name = l_name;
 	}
 
 	@Override
 	public String toString() {
-		return "[no=" + no + ", s_num=" + s_num + ", abbre=" + abbre + ", section=" + section
-				+ ", registDate=" + registDate + "]";
+		return "[no=" + no + ", s_num=" + s_num + ", abbre=" + abbre + ", section=" + section + ", regdate="
+				+ regdate + "]";
 	}
-	
-	
-	
-	
+	public String toAllString() {
+		return "[no=" + no + ", s_num=" + s_num + ", abbre=" + abbre + ", section=" + section + ", regdate="
+				+ regdate + ", s_name =" + s_name + ", l_name=" + l_name +"]";
+	}
 }

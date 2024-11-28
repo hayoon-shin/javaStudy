@@ -33,6 +33,10 @@ public class StudentAllVO {
 		this.sdate = sdate;
 	}
 
+	public StudentAllVO() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public String toString() {
 		return "[" + no + ", " + num + ", " + name + ", " + id + ", " + passwd
